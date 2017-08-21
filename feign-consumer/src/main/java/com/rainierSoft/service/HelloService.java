@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.rainierSoft.component.HelloServiceFallback;
+import com.rainierSoft.config.FullLogConfiguration;
 import com.rainiersoft.helloservice.api.entity.User;
-
-@FeignClient("hello-service")//spring cloud feign 中除了引入了用于客户端负载均衡的spring cloud Ribbon 之外，还引入了服务保护与容错的工具Hystrix
+//spring cloud feign 中除了引入了用于客户端负载均衡的spring cloud Ribbon 之外，还引入了服务保护与容错的工具Hystrix
+//@FeignClient(name="hello-service",fallback=HelloServiceFallback.class)//降级
+//@FeignClient(name="hello-service",configuration=DisableHystrixConfiguration.class)//禁用hystrix
+@FeignClient(name="hello-service",configuration=FullLogConfiguration.class,fallback=HelloServiceFallback.class)//开启日志
 public interface HelloService extends com.rainiersoft.helloservice.api.service.HelloService{
 	@RequestMapping("/hello")
 	String hello();
